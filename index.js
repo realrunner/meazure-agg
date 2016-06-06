@@ -132,7 +132,14 @@ function addProjections(entries) {
   if (from.isSameOrAfter(to)) {
     return entries;
   }
-  const now = moment().startOf('day');
+  let now = moment().startOf('day');
+  let tomorrow = moment().startOf('day').add(1, 'days');
+  if (_.find(entries, e => {
+      const m = moment(e.Date);
+      return m.isSameOrAfter(now) && m.isSameOrBefore(tomorrow);
+  })) {
+    now = tomorrow;
+  }
   let c = from.clone();
   let weekDays = 0, weekDaysPast = 0;
   while(c.isSameOrBefore(to)) {
