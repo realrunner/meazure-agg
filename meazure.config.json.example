@@ -1,0 +1,9 @@
+{
+  "uname": "user@surgeforward.com",
+  "pword": "****",
+  "rates": {
+    "Surge Est. & Interview": 15,
+    "Accretive": 10,
+    "_default": 7
+  }
+}
