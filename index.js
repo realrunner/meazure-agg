@@ -123,6 +123,17 @@ function aggregateResults(entries, config) {
       return memo;
     }, {hours: 0, earnings: 0});
 
+
+  const now = moment().startOf('day');
+  const tomorrow = moment().startOf('day').add(1, 'days');
+  aggregated.haveEntryToday = false;
+  if (_.find(entries, e => {
+      const m = moment(e.Date);
+      return m.isSameOrAfter(now) && m.isSameOrBefore(tomorrow);
+  })) {
+    aggregated.haveEntryToday = true;
+  }
+
   return aggregated;
 }
 
@@ -134,10 +145,7 @@ function addProjections(entries) {
   }
   let now = moment().startOf('day');
   let tomorrow = moment().startOf('day').add(1, 'days');
-  if (_.find(entries, e => {
-      const m = moment(e.Date);
-      return m.isSameOrAfter(now) && m.isSameOrBefore(tomorrow);
-  })) {
+  if (entries.haveEntryToday) {
     now = tomorrow;
   }
   let c = from.clone();
