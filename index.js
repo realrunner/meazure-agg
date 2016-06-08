@@ -18,6 +18,8 @@ if (argv.help) {
   process.exit(0);
 }
 
+const utcOffset = moment().utcOffset();
+
 if (!argv.f || !argv.t) {
   argv.f = moment().startOf('month').format(dateFmt);
   argv.t = moment().endOf('month').format(dateFmt);
@@ -128,8 +130,13 @@ function aggregateResults(entries, config) {
   const tomorrow = moment().startOf('day').add(1, 'days');
   aggregated.haveEntryToday = false;
   if (_.find(entries, e => {
-      const m = moment(e.Date);
-      return m.isSameOrAfter(now) && m.isSameOrBefore(tomorrow);
+
+    // Meazure stores it's dates in an obsurd way. So e.Date is not the actual timestamp the entry was created
+    // but the timestamp adjusted to the UTC offset of the local Meazure server (probably pacific)
+    // This will work for timezones close to that of Meazure, otherwise, all bets are off.
+    const m = moment(e.Date).add(-utcOffset, 'minutes');
+    // console.log(e.Date, m.format(), now.format(), tomorrow.format(), e.Notes);
+    return m.isSameOrAfter(now) && m.isSameOrBefore(tomorrow);
   })) {
     aggregated.haveEntryToday = true;
   }
