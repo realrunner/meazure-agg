@@ -170,13 +170,15 @@ function addProjections(entries) {
   const percentComplete = Math.floor(ratioComplete * 100);
   const earningsPerDay = Math.floor(entries.total.earnings / weekDaysPast);
   const estimatedEarnings = Math.floor(earningsPerDay * weekDays);
+  const estimatedHours = weekDays * (entries.total.hours / weekDaysPast);
   entries.projections = {
     weekDays: weekDays,
     weekDaysPast: weekDaysPast,
     percentComplete: percentComplete,
     avgEarningsPerDay: earningsPerDay,
     avgHoursPerDay: entries.total.hours / weekDaysPast,
-    estimatedEarnings: estimatedEarnings
+    estimatedEarnings: estimatedEarnings,
+    estimatedHours: estimatedHours
   };
   return entries;
 }
